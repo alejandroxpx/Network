@@ -1,0 +1,26 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h1>All Posts</h1>
+
+    <div class="NewPost"> 
+        <br><br>    
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+            <h5>What's on your mind {{request.user.username}} ?</h5>
+            {{ form }}
+            <!-- <input class="textarea" type="text", name="New Post", placeholder="post"> -->
+            <input class="button" type="submit" value="Post">
+        </form>
+
+    </div>
+
+    <div class="Post">
+
+        <br><br><br><br>
+        Display other post later
+    </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,36 @@
+h1{
+    margin: 5px;
+    padding: 20px;
+}
+div.NewPost{
+    margin: auto;
+    width: 90%;
+    border: 1px blue solid;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+input.textarea{
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    resize: both;
+    min-height: 40px;
+    line-height: 20px;
+}
+input.button{
+   align-items: left;
+   margin-top: 5px;
+   display: block;
+   background-color: #2268d1;
+   border-radius: 5px;
+
+}
+div.Post{
+    margin: auto;
+    width: 90%;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 10px;
+}
+
