@@ -6,12 +6,13 @@ from django.urls import reverse
 from numpy import TooHardError
 from django import forms
 
-from .models import NewPost, User
+from .models import Post, User
 
 
 def index(request):
     return render(request, "network/index.html",{
-        "form": NewPostForm()
+        "form": NewPostForm(),
+        "post": Post.objects.all()
     })
 
 
@@ -69,7 +70,23 @@ def register(request):
 class NewPostForm(forms.Form):
     text = forms.CharField(label="",max_length=128)
 
+# Render all post created by this user and other users
 def allPost(request):
+
+    if request.method == "POST":
+        form = NewPostForm(request.POST)
+
+        if form.is_valid():
+
+            post = form.cleaned_data["post"]
+
+            post.append(post)
+
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request,"network/index.html",{
+                "form":form
+            })
     return render(request, "network/index.html",{
         "form": NewPostForm()
     })
