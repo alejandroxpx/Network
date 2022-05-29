@@ -5,16 +5,17 @@ from django.shortcuts import render
 from django.urls import reverse
 from numpy import TooHardError
 from django import forms
+import datetime
 
-from .models import Post, User
-
+from .models import *
 
 def index(request):
-    return render(request, "network/index.html",{
-        "form": NewPostForm(),
-        "post": Post.objects.all()
-    })
 
+    return render(request, "network/index.html",{
+        "form" : NewPostForm(),
+        "post" : Post.objects.all().order_by('-date'),
+
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -68,27 +69,39 @@ def register(request):
         return render(request, "network/register.html")
 
 class NewPostForm(forms.Form):
-    text = forms.CharField(label="",max_length=128)
+    post = forms.CharField(label="",max_length=128)
 
 # Render all post created by this user and other users
-def allPost(request):
+def addPost(request):
 
     if request.method == "POST":
         form = NewPostForm(request.POST)
 
         if form.is_valid():
-
-            post = form.cleaned_data["post"]
-
-            post.append(post)
-
+            new_post = form.cleaned_data["post"]
+            posts = Post(user=request.user,post=new_post,date=datetime.datetime.now())
+            posts.save()
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request,"network/index.html",{
                 "form":form
             })
     return render(request, "network/index.html",{
-        "form": NewPostForm()
+        "form": NewPostForm(),
+        "post": Post.objects.all(),
     })
 
-
+# Display user's profile 
+def profile(request, username):
+    # Display the number of followers user has
+    # post = Post.objects.get()
+    # Display the number of people who follow user
+    # Diplay all post of user, reverse chronological order
+    # Add follow and unfollow button for sign-in user not on self
+    return render(request, "network/profile.html",{
+        "profile": Profile.objects.all(),
+        "username": username.capitalize(),
+        "post" : Post.objects.all().order_by('-date'),
+        "followers": Profile.objects.all().count(),
+        "following": Profile.objects.all().count(),
+    })

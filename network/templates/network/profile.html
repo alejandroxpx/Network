@@ -1,0 +1,27 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<h1>Profile Page</h1>
+<h1>{{username}}</h1>
+<!-- Dont let user follow their own profile -->
+<button class = "btn btn-primary" >Follow</button>
+<br><br>
+<h6>Followers: {{followers}}</h6> 
+<h6>Following: {{following}}</h6>
+<br><br>
+
+    {% for posts in post %}
+    <div class="Post">
+    <h4>{{posts.user.username}}</h4>
+        <a href="{% url 'index' %}">Edit</a>
+        <p> {{posts.post}} <br></p>
+        <p style="color: gray;" >{{posts.date}}</p>
+        <button>{{posts.likes}} like</button><br>
+        <a href="{% url 'index' %}">comment</a>
+    </div>
+    {% endfor %}
+
+
+    
+{% endblock %}

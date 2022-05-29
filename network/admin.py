@@ -11,6 +11,10 @@ class PostAdmin(admin.ModelAdmin):
 class CommentsAdmin(admin.ModelAdmin):
     list_display = ("id", "comment","user_commenting","user_being_commented","date","likes")
 
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("id", "user")
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentsAdmin)
+admin.site.register(Profile, ProfileAdmin)
