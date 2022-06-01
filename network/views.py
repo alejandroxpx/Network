@@ -93,15 +93,12 @@ def addPost(request):
 
 # Display user's profile 
 def profile(request, username):
-    # Display the number of followers user has
-    # post = Post.objects.get()
-    # Display the number of people who follow user
-    # Diplay all post of user, reverse chronological order
-    # Add follow and unfollow button for sign-in user not on self
+    user_id = User.objects.filter(username=username)[:1]
+    
     return render(request, "network/profile.html",{
         "profile": Profile.objects.all(),
-        "username": username.capitalize(),
-        "post" : Post.objects.all().order_by('-date'),
+        "user": User.objects.get(id=user_id),
+        "post" : Post.objects.all().filter(user=user_id).order_by('-date'),
         "followers": Profile.objects.all().count(),
         "following": Profile.objects.all().count(),
     })
