@@ -15,11 +15,11 @@
             <div>
               <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
-                <p>username: admin, Password: admin
-                    username: test, Password: password
+                <!-- <p>username: admin, Password: admin -->
+                    <!-- username: test, Password: password -->
                 </p>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' request.user.username  %}"><strong>{{ user.username }}</strong></a>
+                        <a class="nav-link" href="{% url 'profile' request.user.username  %}"><strong>{{ request.user.username }}</strong></a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
@@ -33,8 +33,8 @@
                         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                     </li>
                 {% else %}
-                    <p>username: admin, Password: admin
-                        username: Alex, Password: password?
+                    <!-- <p>username: admin, Password: admin -->
+                        <!-- username: Alex, Password: password? -->
                     </p>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Log In</a>
