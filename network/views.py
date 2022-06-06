@@ -102,3 +102,10 @@ def profile(request, username):
         "followers": Profile.objects.all().count(),
         "following": Profile.objects.all().count(),
     })
+
+# Need to filter out the post from the people who they follow only
+def following(request, username):
+    user_id = User.objects.filter(username=username)[:1]
+    return render(request, "network/following.html",{
+    "post" : Profile.objects.all().filter(user=user_id).order_by('followers'),
+    })
