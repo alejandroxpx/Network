@@ -109,3 +109,14 @@ def following(request, username):
     return render(request, "network/following.html",{
     "post" : Profile.objects.all().filter(user=user_id).order_by('followers'),
     })
+
+def follow(request,follower,followee):
+# TODO: Need to add the followee to the followers manytomany field 
+#     follower_profile = Profile.objects.filter(username = follower)
+#     followee_profile = Profile.objects.filter(username = followee)
+#     follower_profile.followers()
+    
+    # follower = User.objects.filter( username = follower)
+    # followee = User.objects.filter( username = followee)
+   
+    return render(request, "network/profile.html")
