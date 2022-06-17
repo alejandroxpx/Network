@@ -32,10 +32,11 @@ class Post(models.Model):
         return f"{self.id} {self.user}: {self.post} {self.date} {self. comments} {self.likes}."
 
 class Profile(models.Model):
+    # Need to change the user object to query profil in views
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    followers = models.ForeignKey(User,related_name="followers",on_delete=models.CASCADE,default=0)
-    following = models.ForeignKey(User,related_name="following",on_delete=models.CASCADE,default=0)
-    post_created_by_user = models.ForeignKey(Post,on_delete=models.CASCADE,default=None)
+    followers = models.ManyToManyField(User,related_name="followers",default=None)
+    following = models.ManyToManyField(User,blank=True,related_name="following",default=None)
+    # post_created_by_user = models.ForeignKey(Post,on_delete=models.CASCADE,default=None)
 
     def __str__(self):
         return f"{self.id} {self.user}"

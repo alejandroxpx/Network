@@ -3,7 +3,7 @@
 {% block body %}
 
 <h1>Following</h1>
-
+    
     {% for posts in post %}
         <div class="Post">
             {% if user.is_authenticated %}
@@ -17,6 +17,6 @@
             <p style="color: gray;" >{{posts.date}}</p>
             <button>{{posts.likes}} like</button><br>
             <a href="{% url 'index' %}">comment</a>
-        </div>
+         </div>
     {% endfor %}
 {% endblock %}

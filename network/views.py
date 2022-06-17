@@ -36,11 +36,9 @@ def login_view(request):
     else:
         return render(request, "network/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":
@@ -91,16 +89,32 @@ def addPost(request):
         "post": Post.objects.all(),
     })
 
+def create_profile(request,username):
+    if request.method == "POST":
+        try:
+            profile = Profile.objects.get(username)
+            profile.save()
+        except IntegrityError:
+            return render(request, "network/register.html", {
+                "message": "Profile not created."
+            })
+        # login(request, user)
+    #     return HttpResponseRedirect(reverse("index"))
+    # else:
+    #     return render(request, "network/register.html")
+
+
 # Display user's profile 
 def profile(request, username):
     user_id = User.objects.filter(username=username)[:1]
-    
+    # This uses the Profile model so look at that and dont think about the User model.
+    follower = Profile.objects.get(user=1)
     return render(request, "network/profile.html",{
         "profile": Profile.objects.all(),
         "user": User.objects.get(id=user_id),
         "post" : Post.objects.all().filter(user=user_id).order_by('-date'),
-        "followers": Profile.objects.all().count(),
-        "following": Profile.objects.all().count(),
+        "followers": follower.followers.all().count(),
+        "following": follower.following.all().count(),
     })
 
 # Need to filter out the post from the people who they follow only
@@ -111,12 +125,14 @@ def following(request, username):
     })
 
 def follow(request,follower,followee):
-# TODO: Need to add the followee to the followers manytomany field 
-#     follower_profile = Profile.objects.filter(username = follower)
-#     followee_profile = Profile.objects.filter(username = followee)
-#     follower_profile.followers()
-    
-    # follower = User.objects.filter( username = follower)
-    # followee = User.objects.filter( username = followee)
+    #TODO: Need to add the followee to the followers manytomany field 
+    follower_id = User.objects.filter(username=follower)[:1] 
+    follower_profile = Profile.objects.filter(user = follower_id)[:1]
+
+    followee_id = User.objects.filter(username=followee)[:1] 
+    followee_profile = Profile.objects.filter(user = followee_id)[:1]
+
+    # PROBLEM
+
    
     return render(request, "network/profile.html")

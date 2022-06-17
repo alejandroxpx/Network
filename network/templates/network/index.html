@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1>All Posts</h1>
-
+    {% if user.is_authenticated %}
     <div class="NewPost"> 
         
         <form action="{% url 'addPost' %}" method="post">
@@ -14,7 +14,7 @@
         </form>
 
     </div>
-    
+    {% endif %}
     
     {% for posts in post %}
     <div class="Post">

@@ -10,5 +10,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("profile/<str:username>",views.profile, name = "profile"),
     path("following/<str:username>",views.following, name="following"),
+    path("register", views.create_profile, name = "create_profile"),
+    # Will need to change the link to stay on the followee profile and change the button from follow to following
     path("profile/<str:follower>/<str:followee>",views.follow, name="follow"),
 ]
