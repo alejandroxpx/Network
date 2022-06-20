@@ -3,13 +3,15 @@
 {% block body %}
 
 <h1>Profile Page</h1>
-
+{% if message %}
+<div>{{ message }}</div>
+{% endif %}
 <!-- Dont let user follow their own profile -->
     <div class = "header">
         <h2>{{user.username}}</h2>
         {% if user.is_authenticated %}
             {% if request.user.username != user.username %}
-            <a href="{% url 'follow' request.user.username user.username%}">
+            <a href="{% url 'follow' user.username %}">
                 <button class = "btn btn-primary" >Follow</button>
             </a>
             {% endif %}

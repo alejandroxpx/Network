@@ -61,6 +61,7 @@ def register(request):
             return render(request, "network/register.html", {
                 "message": "Username already taken."
             })
+        
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
@@ -89,50 +90,41 @@ def addPost(request):
         "post": Post.objects.all(),
     })
 
-def create_profile(request,username):
-    if request.method == "POST":
-        try:
-            profile = Profile.objects.get(username)
-            profile.save()
-        except IntegrityError:
-            return render(request, "network/register.html", {
-                "message": "Profile not created."
-            })
-        # login(request, user)
-    #     return HttpResponseRedirect(reverse("index"))
-    # else:
-    #     return render(request, "network/register.html")
-
+# def create_profile(request,username):
+    profile = Profile.objects.get(username)
+    profile.save()
+    return render(request, "network/register.html")
 
 # Display user's profile 
 def profile(request, username):
     user_id = User.objects.filter(username=username)[:1]
-    # This uses the Profile model so look at that and dont think about the User model.
-    follower = Profile.objects.get(user=1)
+    following = Connection.objects.filter(follower_id = user_id).count()
+    follower = Connection.objects.filter(following_id = user_id).count()
     return render(request, "network/profile.html",{
-        "profile": Profile.objects.all(),
         "user": User.objects.get(id=user_id),
         "post" : Post.objects.all().filter(user=user_id).order_by('-date'),
-        "followers": follower.followers.all().count(),
-        "following": follower.following.all().count(),
+        "followers": follower,
+        "following": following,
     })
 
 # Need to filter out the post from the people who they follow only
 def following(request, username):
-    user_id = User.objects.filter(username=username)[:1]
+    # user_id = User.objects.filter(username=username)[:1]
     return render(request, "network/following.html",{
-    "post" : Profile.objects.all().filter(user=user_id).order_by('followers'),
+    # "post" : Profile.objects.all().filter(user=user_id).order_by('followers'),
     })
-
-def follow(request,follower,followee):
-    #TODO: Need to add the followee to the followers manytomany field 
-    follower_id = User.objects.filter(username=follower)[:1] 
-    follower_profile = Profile.objects.filter(user = follower_id)[:1]
-
-    followee_id = User.objects.filter(username=followee)[:1] 
-    followee_profile = Profile.objects.filter(user = followee_id)[:1]
+    
+# TODO: complete follow function to add a new connection and change the color of the follow button and to unfollow.
+def follow(request,followee):
+    followee_info = User.objects.get(user = followee)
+    try:
+        f = Connection(follower_id = request.user ,following_id = followee_info)
+        f.save()
+    except IntegrityError:
+        return HttpResponse('DIDNT WORK')
 
     # PROBLEM
-
-   
-    return render(request, "network/profile.html")
+    return HttpResponse('WORKed')
+    # return render(request, "network/profile.html",{
+    #     "message":"Now following."
+    # })
