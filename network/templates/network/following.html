@@ -6,11 +6,6 @@
     
     {% for posts in post %}
         <div class="Post">
-            {% if user.is_authenticated %}
-            <a href="{% url 'profile' posts.user.username %}"><h4>{{posts.user.username}}</h4></a>
-                {% else %}
-                    <h4>{{posts.user.username}}</h4>
-                {% endif %}
 
             <a href="{% url 'index' %}">Edit</a>
             <p> {{posts.post}} <br></p>
