@@ -12,12 +12,11 @@
         {% if user.is_authenticated %}
             {% if request.user.username != user.username %}
                 {% if flag != None %}
-                {{flag}}
                 <a href="{% url 'follow' user.username %}">
                     <button class = "btn btn-primary" >Unfollow</button>
                 </a>
-                {% else %}
-                <a href="{% url 'follow' user.username %}">
+                {% elif flag == True %}
+                <a href="{% url 'unfollow' user.username %}">
                     <button class = "btn btn-primary" >Follow</button>
                 </a>
                 {% endif %}
