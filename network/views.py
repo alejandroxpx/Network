@@ -75,7 +75,6 @@ def addPost(request):
 
     if request.method == "POST":
         form = NewPostForm(request.POST)
-
         if form.is_valid():
             new_post = form.cleaned_data["post"]
             posts = Post(user=request.user,post=new_post,date=datetime.datetime.now())
@@ -90,11 +89,6 @@ def addPost(request):
         "post": Post.objects.all(),
     })
 
-# def create_profile(request,username):
-    profile = Profile.objects.get(username)
-    profile.save()
-    return render(request, "network/register.html")
-
 # Display user's profile 
 def profile(request, username):
     user_id = User.objects.filter(username=username)[:1]
@@ -104,47 +98,83 @@ def profile(request, username):
     follower = Connection.objects.filter(following_id = user_id).count()
     # Check if the current user already follows the clicked on profile
     check = Connection.objects.filter(follower_id = follower_info ,following_id = followee_info).count()
-    if check > 0:
-        flag = True
-    else: 
-        flag = None
+    if check == 1:
+        #Found instance
+        flag = 1
+    elif check == 0: 
+        #Did not find instance
+        flag = 0
         
     return render(request, "network/profile.html",{
         "user": User.objects.get(id=user_id),
         "post" : Post.objects.all().filter(user=user_id).order_by('-date'),
         "followers": follower,
         "following": following,
-        "flag":flag,
-    })
-
-#TODO Show post from following group only
-def following(request, username):
-    # follower = User.objects.get(username = username)
-    # following = Connection.objects.filter(follower_id=follower)
-
-    return render(request, "network/following.html",{
-    # "post" : Post.objects.filter(user=following)
+        "flag":check,
+        "message":check,
     })
     
 # Follow the user 
 def follow(request, username):
+    user_id = User.objects.filter(username=username)[:1]
     followee_info = User.objects.get(username=username)
     follower_info = User.objects.get(id=request.user.id)
+    following = Connection.objects.filter(follower_id = user_id).count()
+    follower = Connection.objects.filter(following_id = user_id).count()
     check = Connection.objects.filter(follower_id = follower_info ,following_id = followee_info).count()
     if check > 0:
-        return render(request,"network/layout.html",{
-            "flag":True,
+        return render(request,"network/profile.html",{
+            "flag":1,
+            "message":"Already follow this user",
+            "user": User.objects.get(id=user_id),
+            "followers": follower,
+            "following": following,
+            "post" : Post.objects.all().filter(user=user_id).order_by('-date'),
+            "flag":1
         })
     elif check == 0:
         f = Connection(follower_id = follower_info ,following_id = followee_info)
-        f.save()    
-    return render(request,"network/layout.html")
+        f.save() 
+        following = Connection.objects.filter(follower_id = user_id).count()
+        follower = Connection.objects.filter(following_id = user_id).count()   
+        return render(request,"network/profile.html",{
+            "message":"Adding Follower",
+            "user": User.objects.get(id=user_id),
+            "post" : Post.objects.all().filter(user=user_id).order_by('-date'),
+            "followers": follower,
+            "following": following,
+            "flag":1,
+        })
 
 
-def unfollow(request, username):
+def unfollow(request, username): 
+    user_id = User.objects.filter(username=username)[:1]
     followee_info = User.objects.get(username=username)
     follower_info = User.objects.get(id=request.user.id)
-    f = Connection.objects.get(follower_id = follower_info ,following_id = followee_info)
-    f.delete()   
+    f = Connection.objects.filter(follower_id = follower_info ,following_id = followee_info)
+    f.delete() 
+    following = Connection.objects.filter(follower_id = user_id).count()
+    follower = Connection.objects.filter(following_id = user_id).count()
     #TODO: Need to render the current page and simple change the button text to follow
-    return render(request,"network/profile.html")
+    return render(request,"network/profile.html",{
+       "user": User.objects.get(id=user_id),
+        "flag":0,
+        "followers": follower,
+        "following": following,
+        "post" : Post.objects.all().filter(user=user_id).order_by('-date'),
+        "message":"In the unfollow views",
+    })
+
+    #TODO Show post from following group only
+def following(request, username):
+    user_id = User.objects.filter(username=username)[:1]
+    followee_info = User.objects.get(username=username)
+    follower_info = User.objects.get(id=request.user.id)
+    following = []*100
+    following.append(Connection.objects.filter(follower_id = request.user.id))
+    print(following[0])
+    follower = Connection.objects.filter(follower_id = user_id).count()
+    return render(request, "network/following.html",{
+        "user": User.objects.get(id=user_id),
+        # "post" : Post.objects.all().filter(user=following.user).order_by('-date'),
+    })

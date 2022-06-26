@@ -4,24 +4,28 @@
 
 <h1>Profile Page</h1>
 {% if message %}
-<div>{{ message }}</div>
+<!-- <div>Message: {{ message }}</div> -->
 {% endif %}
 <!-- Dont let user follow their own profile -->
     <div class = "header">
         <h2>{{user.username}}</h2>
         {% if user.is_authenticated %}
-            {% if request.user.username != user.username %}
-                {% if flag != None %}
-                <a href="{% url 'follow' user.username %}">
-                    <button class = "btn btn-primary" >Unfollow</button>
-                </a>
-                {% elif flag == True %}
-                <a href="{% url 'unfollow' user.username %}">
-                    <button class = "btn btn-primary" >Follow</button>
-                </a>
-                {% endif %}
+            <!-- Request user: {{request.user.username}} <br> -->
 
-            {% endif %}
+            <!-- User: {{user.username}}<br> -->
+            <!-- Flag: {{flag}} <br> -->
+                {% if request.user.username != user.username %}
+                    {% if flag == 0 %}
+                        <a href="{% url 'follow' user.username %}">
+                            <button class = "btn btn-primary" >Follow</button>
+                        </a>
+                    {% elif flag == 1 %}
+                        <a href="{% url 'unfollow' user.username %}">
+                            <button class = "btn btn-primary" >unfollow</button>
+                        </a>
+                    {% endif %}
+
+                {% endif %}
         {% endif %}
         <h6>Followers: {{followers}}</h6> 
         <h6>Following: {{following}}</h6>
