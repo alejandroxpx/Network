@@ -1,3 +1,4 @@
+from enum import auto
 from genericpath import exists
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -119,6 +120,8 @@ def follow(request, username):
     user_id = User.objects.filter(username=username)[:1]
     followee_info = User.objects.get(username=username)
     follower_info = User.objects.get(id=request.user.id)
+    # follower_post = Post.objects.get(user = request.user)
+    # followee_post = Post.objects.get(user = user_id)
     following = Connection.objects.filter(follower_id = user_id).count()
     follower = Connection.objects.filter(following_id = user_id).count()
     check = Connection.objects.filter(follower_id = follower_info ,following_id = followee_info).count()
@@ -133,8 +136,12 @@ def follow(request, username):
             "flag":1
         })
     elif check == 0:
+        # TODO Needs to figure out how to add post connection to connections to referrence in the following tab
         f = Connection(follower_id = follower_info ,following_id = followee_info)
+        # f.following_id_post.set(followee_post)
+        # f.follower_id_post.set(follower_post)
         f.save() 
+
         following = Connection.objects.filter(follower_id = user_id).count()
         follower = Connection.objects.filter(following_id = user_id).count()   
         return render(request,"network/profile.html",{
@@ -167,14 +174,29 @@ def unfollow(request, username):
 
     #TODO Show post from following group only
 def following(request, username):
-    user_id = User.objects.filter(username=username)[:1]
-    followee_info = User.objects.get(username=username)
-    follower_info = User.objects.get(id=request.user.id)
-    following = []*100
-    following.append(Connection.objects.filter(follower_id = request.user.id))
-    print(following[0])
-    follower = Connection.objects.filter(follower_id = user_id).count()
+    # user_id = User.objects.get(username=username)
+    # print("user_id: ",request.user.id)
+    following = Connection.objects.raw('SELECT id, following_id_id FROM network_connection WHERE follower_id_id = %s'% (request.user.id))
+    # print("following: ",following)
+
+    list = []
+    following_list = []
+    counter=0
+    for user in following:
+        # print("user: ",user.id)
+        user2 = Connection.objects.filter(id=user.id)
+        list.append(user2)
+        following_list.append(list[counter][0].following_id.id)
+        # print("following list",following_list)
+        counter +=1
+    # print(len(following_list))
+    if len(following_list)==1:
+        following_list.append(0)
+        # print(len(following_list))
+    following_list = tuple(following_list)
+    # print(following_list)
     return render(request, "network/following.html",{
-        "user": User.objects.get(id=user_id),
-        # "post" : Post.objects.all().filter(user=following.user).order_by('-date'),
+        "user": User.objects.get(id=request.user.id),
+        # "list":list,
+        "post" : Post.objects.raw('SELECT * FROM network_post WHERE user_id IN %s' %(following_list,))
     })

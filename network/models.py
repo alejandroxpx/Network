@@ -1,6 +1,7 @@
 from turtle import ondrag
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from numpy import empty
 
 
 class User(AbstractUser):
@@ -22,7 +23,7 @@ class Comment(models.Model):
 
 # User, post, date, comments, likes
 class Post(models.Model):
-    user = models.ForeignKey(User , on_delete=models.CASCADE )
+    user = models.ForeignKey(User,on_delete=models.CASCADE )
     post = models.CharField(max_length=64)
     date = models.DateTimeField(auto_now_add=True)
     comments = models.ManyToManyField(Comment, blank=True)
@@ -33,7 +34,9 @@ class Post(models.Model):
 
 class Connection(models.Model):
     follower_id = models.ForeignKey(User, on_delete=models.CASCADE,related_name="follower")
+    # follower_id_post = models.ManyToManyField(Post,default=None, related_name="followerPost")
     following_id = models.ForeignKey(User, on_delete=models.CASCADE,related_name="following")
+    following_id_post = models.ManyToManyField(Post,default=None)
 
 
 

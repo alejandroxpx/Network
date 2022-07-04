@@ -4,6 +4,10 @@
 
 <h1>Following</h1>
     <h1>{{request.user.username}}</h1>
+    {% for item in list %}
+        <h1>item : {{item.follower_id.username}}</h1>
+    {% endfor %}
+
     {% for posts in post %}
         <div class="Post">
             <h4>{{posts.user.username}}</h4>
