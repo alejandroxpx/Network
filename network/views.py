@@ -7,14 +7,26 @@ from django.shortcuts import render
 from django.urls import reverse
 from numpy import TooHardError
 from django import forms
+from django.core.paginator import Paginator, EmptyPage
 import datetime
 
 from .models import *
 
 def index(request):
+    objects = Post.objects.all().order_by("-date")
+    page_number = request.GET.get('page',1)
+    p = Paginator(objects,10)
+    try: 
+        page = p.page(page_number)
+    except EmptyPage:
+        page = p.page(1)
+    page_obj = p.get_page(page_number)
     return render(request, "network/index.html",{
         "form" : NewPostForm(),
-        "post" : Post.objects.all().order_by('-date'),
+        # "post" : Post.objects.all().order_by('-date'),
+        "post": page_obj,
+        "page": page,
+        "page_count":p.num_pages
 
     })
 
@@ -115,7 +127,7 @@ def profile(request, username):
         "message":check,
     })
     
-# Follow the user 
+# Follow user 
 def follow(request, username):
     user_id = User.objects.filter(username=username)[:1]
     followee_info = User.objects.get(username=username)
@@ -153,7 +165,7 @@ def follow(request, username):
             "flag":1,
         })
 
-
+# Unfollow user
 def unfollow(request, username): 
     user_id = User.objects.filter(username=username)[:1]
     followee_info = User.objects.get(username=username)
@@ -172,7 +184,7 @@ def unfollow(request, username):
         "message":"In the unfollow views",
     })
 
-    #TODO Show post from following group only
+# Display post from users being followed only
 def following(request, username):
     # user_id = User.objects.get(username=username)
     # print("user_id: ",request.user.id)

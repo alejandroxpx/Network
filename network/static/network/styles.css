@@ -32,4 +32,8 @@ div.header{
 h1{
     text-align: center;
 }
+div.page{
+    text-align: center;
+    margin: 3%;
+}
 

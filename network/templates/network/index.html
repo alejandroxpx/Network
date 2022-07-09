@@ -28,16 +28,25 @@
             <h4>{{posts.user.username}}</h4>
         {% endif %}
 
+        {% if posts.user.username == request.user.username %}
         <a href="{% url 'index' %}">Edit</a>
+        {% endif %}
         <p> {{posts.post}} <br></p>
         <p style="color: gray;" >{{posts.date}}</p>
         <button>{{posts.likes}} like</button><br>
         <a href="{% url 'index' %}">comment</a>
     </div>
     {% endfor %}
+<div class = "page">
+    {% if page.has_previous %}
+        <a  href="{% url 'index' %}?page={{page.previous_page_number}}">| Previous |</a>
+    {% endif %}
 
+    {% if page.has_next %}
+        <a  href="{% url 'index' %}?page={{page.next_page_number}}">| Next |</a>
+    {% endif %}
     
-
+</div>
 
 
 {% endblock %}
