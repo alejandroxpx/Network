@@ -1,5 +1,7 @@
 {% extends "network/layout.html" %}
 
+
+
 {% if message %}
 <div>{{ message }}</div>
 {% endif %}
@@ -29,9 +31,26 @@
         {% endif %}
 
         {% if posts.user.username == request.user.username %}
-        <a href="{% url 'index' %}">Edit</a>
+            <!-- User will click on edit button and then text area should appear filling in that text and user can type -->
+            <button class="edit" >Edit</button>
+                <div id = "edit-view">
+                    <h3>Edit Post</h3>
+                        <form id="edit-form">
+                            <!-- <div class="form-group">
+                                From: <input disabled class="form-control" value="{{ request.user.email }}">
+                            </div>
+                            <div class="form-group">
+                                To: <input id="compose-recipients" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="edit-subject" placeholder="Subject">
+                            </div> -->
+                            <textarea class="form-control" id="compose-body" placeholder="Body">posts.post</textarea>
+                            <input type="submit" class="btn btn-primary"/>
+                        </form>
+                </div>
         {% endif %}
-        <p> {{posts.post}} <br></p>
+        <p class="post"> {{posts.post}} <br></p>
         <p style="color: gray;" >{{posts.date}}</p>
         <button>{{posts.likes}} like</button><br>
         <a href="{% url 'index' %}">comment</a>

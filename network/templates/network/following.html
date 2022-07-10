@@ -12,7 +12,9 @@
         <div class="Post">
             <!-- TODO: This is broken...needs to link to users profile that was clicked on. -->
             <a href="{% url 'index' %}"><h4>{{posts.user.username}}</h4></a>
-            <a href="{% url 'index' %}">Edit</a>
+            {% if posts.user.username == request.user.username %}
+            <button>Edit</button>
+            {% endif %}
             <p> {{posts.post}} <br></p>
             <p style="color: gray;" >{{posts.date}}</p>
             <button>{{posts.likes}} like</button><br>
