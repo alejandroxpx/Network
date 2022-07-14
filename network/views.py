@@ -1,14 +1,18 @@
 from enum import auto
 from genericpath import exists
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from numpy import TooHardError
 from django import forms
+import json
 from django.core.paginator import Paginator, EmptyPage
+from django.http import JsonResponse
 import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
@@ -212,3 +216,20 @@ def following(request, username):
         # "list":list,
         "post" : Post.objects.raw('SELECT * FROM network_post WHERE user_id IN %s' %(following_list,))
     })
+
+#TODO: Need to get post id to filter which post I want to edit
+@csrf_exempt
+@login_required
+def edit(request,id):
+    # Get user
+    user = User.objects.get(username=request.user.username)
+    
+    # Get contents of email
+    data = json.loads(request.body)
+    body = data.get("body", "")
+    print(id)
+    post_ = Post.objects.get(id=id)
+    print(post_)
+    # print(time)
+
+    return HttpResponse("yay")
