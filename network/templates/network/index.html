@@ -32,12 +32,13 @@
 
         {% if posts.user.username == request.user.username %}
             <!-- User will click on edit button and then text area should appear filling in that text and user can type -->
-            <button class="edit" >Edit</button>
-                <div id = "edit-view">
+            <button class="edit" id="{{posts.id}}">Edit</button>
+                <div id = "edit-view" >
                     <h3>Edit Post</h3>
                         <form id="form">
-                            <textarea id="post-body" placeholder="Body" type="text">{{posts.post}}</textarea>
-                            <input type="submit" type="subtmit"/>
+                            <textarea id="post-body"  type="text">{{posts.post}}</textarea>
+                            <br>
+                            <input type="submit" />
                         </form>
                 </div>
         {% endif %}
