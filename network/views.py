@@ -221,14 +221,18 @@ def following(request, username):
 @csrf_exempt
 @login_required
 def edit(request,id):
+
+    print("id: ",id)
     # Get contents of email
     data = json.loads(request.body)
     body = data.get("body", "")
 
     # Get user
     user = User.objects.get(username=request.user.username)
+    print(user.username)
     # GET post
     post = Post.objects.get(id=id)
+    print(post.post)
     post.post = body
     post.save()
 # #####
