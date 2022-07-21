@@ -1,6 +1,6 @@
 // Wait for page to load
 document.addEventListener('DOMContentLoaded', function() {
-    // hide all textareas
+    // hide all textareasls
     var x = document.querySelectorAll("#edit-view");
     x.forEach(element => element.style.display = "none");
     // Select the submit button and input to be used later
@@ -15,7 +15,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         postedit(id)
-    }))
+    }))//end forEach
+
+    var j = document.querySelectorAll('.like-button');
+    j.forEach(element => element.addEventListener('click', function(){
+        const id = element.id;
+        // for (var i =0; i<element.length; i+=1){
+        //     if (element[i].className == id){
+        //         element[i].style.display = 'block';
+        //     }
+        // }
+        like_post(id)
+    }));
 });// end DomContentLoaded
 
 function postedit(id){
@@ -46,3 +57,7 @@ function save_post(id){
 function clean_up(){
     document.querySelector('#edit-view').style.display = 'block';
 }// End clean_up
+
+function like_post(id){
+   console.log(id)
+}// End like_post
