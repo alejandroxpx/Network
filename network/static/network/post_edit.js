@@ -57,7 +57,19 @@ function save_post(id){
 function clean_up(){
     document.querySelector('#edit-view').style.display = 'block';
 }// End clean_up
-
+// TODO: Need to make page work without reloading
 function like_post(id){
    console.log(id)
-}// End like_post
+
+    fetch(`/like/${id}`,{
+        method: 'POST',
+        body: JSON.stringify({
+            body: document.querySelector(`p#post${id}`).value,
+            id: id,
+        })
+    })
+.then(response => response.json())
+.then(result => {
+    location.reload();
+});
+}// End like_post()

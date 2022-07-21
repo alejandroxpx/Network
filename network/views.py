@@ -250,3 +250,35 @@ def edit(request,id):
         "page": page,
         "page_count":p.num_pages
     })
+@csrf_exempt
+@login_required
+def like(request,id):
+    print("id: ",id)
+    # Get contents of email
+    data = json.loads(request.body)
+    body = data.get("body", "")
+    # Get user
+    user = User.objects.get(username=request.user.username)
+    print(user.username)
+    # GET post
+    post = Post.objects.get(id=id)
+  
+    post.likes += 1
+    print(post.likes)
+    post.save()
+###
+    objects = Post.objects.all().order_by("-date")
+    page_number = request.GET.get('page',1)
+    p = Paginator(objects,10)
+    try: 
+        page = p.page(page_number)
+    except EmptyPage:
+        page = p.page(1)
+    page_obj = p.get_page(page_number)
+    return render(request, "network/index.html",{
+        "form" : NewPostForm(),
+        "post": page_obj,
+        "page": page,
+        "page_count":p.num_pages
+        })
+

@@ -44,7 +44,7 @@
                 </div>
         {% endif %}
         <div id = "post{{posts.id}}">
-            <p class="post"> {{posts.post}} <br></p>
+            <p id="post{{posts.id}}"> {{posts.post}} <br></p>
             <p id="timestamp" style="color: gray;" >{{posts.date}}</p>
         </div>
         <button class = "like-button" id="{{posts.id}}" >{{posts.likes}} like</button><br>
