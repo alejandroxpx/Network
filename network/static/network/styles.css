@@ -12,7 +12,7 @@ input.button{
    margin-top: 5px;
    display: block;
    background-color: #2268d1;
-   border-radius: 5px;
+   /* border-radius: 5px; */
 
 }
 div.Post{
@@ -36,4 +36,42 @@ div.page{
     text-align: center;
     margin: 3%;
 }
+.like-button{
+    font-size: x-small;
+    /* text-orientation: rotate(45deg); */
+    position: relative;
+    width: 15px;
+    height: 15px;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    background-color: rgb(226, 10, 43);
+
+}
+/* need to rotate the text */
+.like-button::selection{
+    -webkit-transform: rotate(45deg);
+}
+.like-button:before,
+.like-button:after{
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  content: '';
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  background-color: rgb(226, 10, 43);
+}
+.like-button:before{
+    bottom: 7px;
+    left: -1px;
+  }
+  .like-button:after{
+    top: -2px;
+    right: 7px;
+  }
 

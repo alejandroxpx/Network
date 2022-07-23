@@ -1,6 +1,16 @@
 // Wait for page to load
 document.addEventListener('DOMContentLoaded', function() {
-    // hide all textareasls
+    
+    // Like button on each post
+    var j = document.querySelectorAll('.like-button');
+    j.forEach(element => element.addEventListener('click', function(){
+        const id = element.id;
+        var count = element.innerHTML;
+        element.innerHTML = parseInt(count) +1;
+        like_post(id)
+        return false;
+    }));
+    // hide all text areas
     var x = document.querySelectorAll("#edit-view");
     x.forEach(element => element.style.display = "none");
     // Select the submit button and input to be used later
@@ -16,18 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         postedit(id)
     }))//end forEach
-
-    var j = document.querySelectorAll('.like-button');
-    j.forEach(element => element.addEventListener('click', function(){
-        const id = element.id;
-        // for (var i =0; i<element.length; i+=1){
-        //     if (element[i].className == id){
-        //         element[i].style.display = 'block';
-        //     }
-        // }
-        like_post(id)
-    }));
+    return false;
 });// end DomContentLoaded
+
 
 function postedit(id){
     // Hide post and place in textarea
@@ -57,10 +58,9 @@ function save_post(id){
 function clean_up(){
     document.querySelector('#edit-view').style.display = 'block';
 }// End clean_up
+
 // TODO: Need to make page work without reloading
 function like_post(id){
-   console.log(id)
-
     fetch(`/like/${id}`,{
         method: 'POST',
         body: JSON.stringify({
@@ -69,7 +69,7 @@ function like_post(id){
         })
     })
 .then(response => response.json())
-.then(result => {
-    location.reload();
+.then(result => {    
+    return false;
 });
 }// End like_post()

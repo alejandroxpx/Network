@@ -265,7 +265,7 @@ def like(request,id):
   
     post.likes += 1
     print(post.likes)
-    post.save()
+    post.save(update_fields=["likes"])
 ###
     objects = Post.objects.all().order_by("-date")
     page_number = request.GET.get('page',1)

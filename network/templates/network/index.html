@@ -47,7 +47,8 @@
             <p id="post{{posts.id}}"> {{posts.post}} <br></p>
             <p id="timestamp" style="color: gray;" >{{posts.date}}</p>
         </div>
-        <button class = "like-button" id="{{posts.id}}" >{{posts.likes}} like</button><br>
+        <!-- Turn this into a heart -->
+        <button class = "like-button" id="{{posts.id}}" >{{posts.likes}}</button><br>
         <a href="{% url 'index' %}">comment</a>
     </div>
     {% endfor %}
