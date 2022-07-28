@@ -51,9 +51,10 @@ div.page{
 
 }
 /* need to rotate the text */
-.like-button::selection{
-    -webkit-transform: rotate(45deg);
+.like-button::-webkit-progress-inner-element{
+    transform: rotate(45deg);
 }
+
 .like-button:before,
 .like-button:after{
   position: absolute;
